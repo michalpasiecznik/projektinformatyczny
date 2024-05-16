@@ -1,0 +1,27 @@
+/* tasks.css */
+
+.title-label {
+    -fx-font-size: 24px; /* Rozmiar czcionki */
+    -fx-text-fill: #333333; /* Kolor tekstu */
+    -fx-alignment: center; /* Wyrównanie tekstu do środka */
+}
+
+.tasks-list-view {
+    -fx-pref-width: 400px; /* Szerokość listy zadań */
+    -fx-pref-height: 200px; /* Wysokość listy zadań */
+    -fx-alignment: center; /* Wyrównanie listy do środka */
+}
+
+.button-bar {
+    -fx-spacing: 10px; /* Odległość między przyciskami */
+    -fx-alignment: center; /* Wyrównanie przycisków do środka */
+}
+
+.button {
+    -fx-min-width: 200px; /* Minimalna szerokość przycisku */
+    -fx-font-size: 16px; /* Rozmiar czcionki przycisku */
+}
+
+.tool-bar {
+    -fx-alignment: center; /* Wyrównanie przycisków w ToolBar do środka */
+}
