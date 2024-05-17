@@ -28,7 +28,6 @@
                                 <PropertyValueFactory property="taskName"/>
                             </cellValueFactory>
                         </TableColumn>
-
                         <!-- Kolumny dla godzin od 8:00 do 16:00 -->
                         <TableColumn text="8:00"/>
                         <TableColumn text="9:00"/>

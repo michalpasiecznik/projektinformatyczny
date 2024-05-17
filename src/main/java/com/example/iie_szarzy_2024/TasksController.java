@@ -1,5 +1,8 @@
 package com.example.iie_szarzy_2024;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,11 +13,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 public class TasksController {
+
+    @FXML
+    private TableView<String> additionalTableView;
 
     @FXML
     private Label titleLabel;
@@ -68,10 +77,50 @@ public class TasksController {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/sklepszary", "root", "");
             // Ładowanie zadań z bazy danych
             loadTasksFromDatabase();
+
+            // Dodanie nazw zadań do pierwszej kolumny w tabeli
+            loadTaskNamesToTableView();
+
+            // Dodaj kolumny dla godzin od 8:00 do 16:00
+            for (int i = 8; i <= 16; i++) {
+                TableColumn<String, String> hourColumn = new TableColumn<>(String.format("%02d:00", i));
+                hourColumn.setCellValueFactory(data -> new SimpleStringProperty(""));
+                additionalTableView.getColumns().add(hourColumn);
+            }
         } catch (Exception e) {
             System.out.println("Wystąpił błąd podczas inicjalizacji bazy danych.");
         }
     }
+
+
+    @FXML
+    public void loadTaskNamesToTableView() {
+        try {
+            String query = "SELECT Opis FROM zadania";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<String> taskDescriptions = new ArrayList<>();
+            while (resultSet.next()) {
+                String taskDescription = resultSet.getString("Opis");
+                taskDescriptions.add(taskDescription);
+            }
+
+            TableColumn<String, String> descriptionColumn = new TableColumn<>("Opis");
+            descriptionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
+
+            additionalTableView.getColumns().clear(); // Wyczyszczenie kolumn przed dodaniem nowej
+            additionalTableView.getColumns().add(descriptionColumn);
+
+            additionalTableView.getItems().setAll(taskDescriptions);
+
+            preparedStatement.close();
+        } catch (Exception e) {
+            System.out.println("Wystąpił błąd podczas ładowania opisów zadań do widoku tabeli: " + e.getMessage());
+        }
+    }
+
+
 
     @FXML
     public void loadTasksFromDatabase() {
@@ -87,18 +136,29 @@ public class TasksController {
                 String status = resultSet.getString("Status");
                 String managerName = getManagerNameByTaskId(taskId);
                 String employeeName = getEmployeeNameByTaskId(taskId);
+                // Pobranie dat rozpoczęcia i zakończenia zadania
+                Time startTime = resultSet.getTime("DataRozpoczecia");
+                Time endTime = resultSet.getTime("DataZakonczenia");
 
-                // Tworzenie formatowanego łańcucha dla zadania
-                tasks.add(taskId + " | " + taskDescription + " | Status: " + status + " | Kierownik: " + managerName + " | Pracownik: " + employeeName + " |");
+                // Formatowanie dat do wyświetlenia tylko godziny
+                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                String startDate = timeFormat.format(startTime);
+                String endDate = timeFormat.format(endTime);
+
+                // Tworzenie formatowanego łańcucha dla zadania z godzinami rozpoczęcia i zakończenia
+                String formattedTask = String.format("%d | %s | Status: %s | Kierownik: %s | Pracownik: %s | Rozpoczęcie: %s | Zakończenie: %s |",
+                        taskId, taskDescription, status, managerName, employeeName, startDate, endDate);
+                tasks.add(formattedTask);
             }
 
             tasksListView.getItems().setAll(tasks);
 
             preparedStatement.close();
         } catch (Exception e) {
-            System.out.println("Wystąpił błąd podczas inicjalizacji bazy danych.");
+            System.out.println("Wystąpił błąd podczas ładowania zadań z bazy danych: " + e.getMessage());
         }
     }
+
 
     @FXML
     private void handleAddTask() {
@@ -106,6 +166,15 @@ public class TasksController {
             // Pobranie listy kierowników i pracowników
             List<String> managers = getManagersList();
             List<String> employees = getEmployeesList();
+            // Lista godzin od 8:00 do 16:00
+            List<String> hours = new ArrayList<>();
+            for (int i = 8; i <= 16; i++) {
+                hours.add(String.format("%02d:00", i));
+            }
+
+            // Pobranie dzisiejszej daty
+            LocalDate currentDate = LocalDate.now();
+            String today = currentDate.toString();
 
             // Wyświetlenie okna dialogowego z formularzem dodawania zadania
             Dialog<String> dialog = new Dialog<>();
@@ -125,8 +194,16 @@ public class TasksController {
             ChoiceBox<String> employeeChoiceBox = new ChoiceBox<>();
             employeeChoiceBox.getItems().addAll(employees);
 
+            Label startTimeLabel = new Label("Wybierz godzinę rozpoczęcia:");
+            ChoiceBox<String> startTimeChoiceBox = new ChoiceBox<>();
+            startTimeChoiceBox.getItems().addAll(hours);
+
+            Label endTimeLabel = new Label("Wybierz godzinę zakończenia:");
+            ChoiceBox<String> endTimeChoiceBox = new ChoiceBox<>();
+            endTimeChoiceBox.getItems().addAll(hours);
+
             VBox vbox = new VBox(10);
-            vbox.getChildren().addAll(taskLabel, taskTextArea, managerLabel, managerChoiceBox, employeeLabel, employeeChoiceBox);
+            vbox.getChildren().addAll(taskLabel, taskTextArea, managerLabel, managerChoiceBox, employeeLabel, employeeChoiceBox, startTimeLabel, startTimeChoiceBox, endTimeLabel, endTimeChoiceBox);
             dialog.getDialogPane().setContent(vbox);
 
             // Dodanie przycisków do formularza dialogowego
@@ -135,7 +212,8 @@ public class TasksController {
             // Obsługa zdarzenia zatwierdzenia formularza
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == ButtonType.OK) {
-                    return taskTextArea.getText() + ";" + managerChoiceBox.getValue() + ";" + employeeChoiceBox.getValue();
+                    return taskTextArea.getText() + ";" + managerChoiceBox.getValue() + ";" + employeeChoiceBox.getValue() + ";" +
+                            today + " " + startTimeChoiceBox.getValue() + ":00" + ";" + today + " " + endTimeChoiceBox.getValue() + ":00"; // Pełna data i godzina
                 }
                 return null;
             });
@@ -146,15 +224,19 @@ public class TasksController {
                 String taskDescription = parts[0];
                 String managerName = parts[1];
                 String employeeName = parts[2];
+                String startDateTime = parts[3];
+                String endDateTime = parts[4];
 
                 int managerId = getManagerIdByName(managerName);
                 int employeeId = getEmployeeIdByName(employeeName);
 
                 // Dodanie nowego zadania do bazy danych
-                String insertQuery = "INSERT INTO zadania (Opis, Status, TerminWykonania, DataUtworzenia, DataModyfikacji, IDKierownika) VALUES (?, 'Oczekujące', NOW(), NOW(), NOW(), ?)";
+                String insertQuery = "INSERT INTO zadania (Opis, Status, DataUtworzenia, DataRozpoczecia, DataZakonczenia, IDKierownika) VALUES (?, 'Oczekujące', NOW(), ?, ?, ?)";
                 PreparedStatement insertStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
                 insertStatement.setString(1, taskDescription);
-                insertStatement.setInt(2, managerId);
+                insertStatement.setString(2, startDateTime);
+                insertStatement.setString(3, endDateTime);
+                insertStatement.setInt(4, managerId);
                 insertStatement.executeUpdate();
 
                 ResultSet generatedKeys = insertStatement.getGeneratedKeys();
@@ -173,13 +255,15 @@ public class TasksController {
                 assignEmployeeStatement.executeUpdate();
 
                 // Dodanie nowego zadania do listy w interfejsie użytkownika
-                String newTask = taskId + " | " + taskDescription + " | Status: Oczekujące | Kierownik: " + managerName + " | Pracownik: " + employeeName + " |";
+                String newTask = taskId + " | " + taskDescription + " | Status: Oczekujące | Kierownik: " + managerName + " | Pracownik: " + employeeName + " | Rozpoczęcie: " + startDateTime + " | Zakończenie: " + endDateTime + " |";
                 tasksListView.getItems().add(newTask);
             }
         } catch (Exception e) {
             System.out.println("Wystąpił błąd podczas dodawania zadania: " + e.getMessage());
         }
     }
+
+
 
     // Metody pomocnicze:
     private List<String> getManagersList() throws SQLException {
