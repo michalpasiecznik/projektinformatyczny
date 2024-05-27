@@ -8,14 +8,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
 
 
 public class TasksController {
@@ -80,12 +81,6 @@ public class TasksController {
             // Dodanie nazw zadań do pierwszej kolumny w tabeli
             loadTaskNamesToTableView();
 
-            // Dodaj kolumny dla godzin od 8:00 do 16:00
-            for (int i = 8; i <= 16; i++) {
-                TableColumn<String, String> hourColumn = new TableColumn<>(String.format("%02d:00", i));
-                hourColumn.setCellValueFactory(data -> new SimpleStringProperty(""));
-                additionalTableView.getColumns().add(hourColumn);
-            }
         } catch (Exception e) {
             System.out.println("Wystąpił błąd podczas inicjalizacji bazy danych.");
         }
@@ -95,14 +90,18 @@ public class TasksController {
     @FXML
     public void loadTaskNamesToTableView() {
         try {
-            String query = "SELECT Opis FROM zadania";
+            String query = "SELECT Opis, DataRozpoczecia, DataZakonczenia FROM zadania";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             List<String> taskDescriptions = new ArrayList<>();
+            Map<String, Pair<LocalDateTime, LocalDateTime>> taskTimes = new HashMap<>(); // Mapa przechowująca godziny rozpoczęcia i zakończenia zadań
             while (resultSet.next()) {
                 String taskDescription = resultSet.getString("Opis");
+                LocalDateTime startTime = resultSet.getTimestamp("DataRozpoczecia").toLocalDateTime();
+                LocalDateTime endTime = resultSet.getTimestamp("DataZakonczenia").toLocalDateTime();
                 taskDescriptions.add(taskDescription);
+                taskTimes.put(taskDescription, new Pair<>(startTime, endTime));
             }
 
             TableColumn<String, String> descriptionColumn = new TableColumn<>("Opis");
@@ -110,6 +109,32 @@ public class TasksController {
 
             additionalTableView.getColumns().clear(); // Wyczyszczenie kolumn przed dodaniem nowej
             additionalTableView.getColumns().add(descriptionColumn);
+
+            List<String> hours = new ArrayList<>();
+            for (int i = 8; i <= 16; i++) {
+                hours.add(String.format("%02d:00", i));
+            }
+
+            // Dodanie kolumn godzin, jeśli nie istnieją
+            for (String hour : hours) {
+                TableColumn<String, String> hourColumn = new TableColumn<>(hour);
+                hourColumn.setCellValueFactory(cellData -> {
+                    String taskDescription = cellData.getValue();
+                    Pair<LocalDateTime, LocalDateTime> taskTime = taskTimes.get(taskDescription);
+                    if (taskTime != null) {
+                        LocalDateTime startTime = taskTime.getKey();
+                        LocalDateTime endTime = taskTime.getValue();
+                        LocalTime cellHour = LocalTime.parse(hour);
+                        if (cellHour.isAfter(startTime.toLocalTime()) && cellHour.isBefore(endTime.toLocalTime())) {
+                            return new SimpleStringProperty("||||||||||||");
+                        } else if (cellHour.equals(startTime.toLocalTime()) || cellHour.equals(endTime.toLocalTime())) {
+                            return new SimpleStringProperty("||||||||||||");
+                        }
+                    }
+                    return new SimpleStringProperty("");
+                });
+                additionalTableView.getColumns().add(hourColumn);
+            }
 
             additionalTableView.getItems().setAll(taskDescriptions);
 
