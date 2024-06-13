@@ -20,7 +20,7 @@
             <!-- Wykres Gantta -->
             <VBox alignment="CENTER" spacing="10">
                 <Label fx:id="additionalLabel" layoutX="78.0" layoutY="42.0" text="Wykres Gantta:" />
-                <TableView fx:id="additionalTableView" prefWidth="1000.0" prefHeight="600.0">
+                <TableView fx:id="additionalTableView" prefWidth="650.0" prefHeight="400.0">
                     <columns>
                         <!-- Kolumna dla nazwy zadania -->
                         <TableColumn text="Nazwa zadania">
