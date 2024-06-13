@@ -74,7 +74,7 @@ public class TasksController {
     public void initialize() {
         try {
             // Nawiązanie połączenia z bazą danych
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/sklepszary", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/sklepszary2", "root", "");
             // Ładowanie zadań z bazy danych
             loadTasksFromDatabase();
 

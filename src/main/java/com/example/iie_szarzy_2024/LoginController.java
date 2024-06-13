@@ -33,7 +33,7 @@ public class LoginController {
     @FXML
     public void initialize() {
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/sklepszary", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/sklepszary2", "root", "");
         } catch (Exception e) {
             System.out.println("Wystąpił błąd podczas połączenia z bazą danych");
         }

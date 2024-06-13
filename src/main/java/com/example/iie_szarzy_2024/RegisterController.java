@@ -13,7 +13,7 @@ import java.sql.Statement;
 
 public class RegisterController {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/";
-    private static final String DB_NAME = "sklepszary";
+    private static final String DB_NAME = "sklepszary2";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
