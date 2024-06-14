@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@tasks.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.iie_szarzy_2024.TasksController">
+
+    <!-- Pasek narzędzi -->
+    <top>
+        <ToolBar>
+            <!-- Kontener dla przycisków po lewej stronie -->
+            <HBox>
+                <!-- Przycisk "Magazyn" -->
+                <Button fx:id="StorageButton" onAction="#storageButtonAction" text="Magazyn" />
+
+                <!-- Przycisk "Raport" -->
+                <Button fx:id="ReportButton" onAction="#handleRaport" text="Raport" />
+
+                <!-- Przycisk "Panel Administratora" -->
+                <Button fx:id="adminPanelButton" onAction="#handleAdminPanel" text="Panel Administratora" />
+            </HBox>
+
+            <!-- Puste pole elastyczne, aby przyciski były po prawej stronie -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Kontener dla przycisków "Profil" i "Wyloguj" -->
+            <HBox>
+                <!-- Przycisk "Profil" -->
+                <Button fx:id="ProfileButton" onAction="#handleProfile" text="Profil" />
+
+                <!-- Przycisk "Wyloguj" -->
+                <Button fx:id="LogoutButton" onAction="#handleLogout" text="Wyloguj" />
+            </HBox>
+        </ToolBar>
+    </top>
+
+    <!-- Lista zadań na środku -->
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+            <Label fx:id="titleLabel" text="Lista zadań:" />
+            <TableView fx:id="tasksTableView" prefHeight="225.0" prefWidth="800.0">
+                <columns>
+                    <TableColumn fx:id="taskIdColumn" text="Liczba porządkowa" />
+                    <TableColumn fx:id="taskDescriptionColumn" text="Opis" />
+                    <TableColumn fx:id="taskStatusColumn" text="Status" />
+                    <TableColumn fx:id="taskPriorityColumn" text="Priorytet" />
+                    <TableColumn fx:id="taskCategoryColumn" text="Kategoria" />
+                    <TableColumn fx:id="taskEmployeeColumn" text="Pracownik" />
+                    <TableColumn fx:id="taskStartColumn" text="Godzina Rozpoczęcia" />
+                    <TableColumn fx:id="taskDeadlineColumn" text="Godzina Zakończenia" />
+                    <TableColumn fx:id="taskCreationDateColumn" text="Data Utworzenia" />
+                    <TableColumn fx:id="taskModificationDateColumn" text="Data Modyfikacji" />
+                </columns>
+            </TableView>
+            <Label fx:id="additionalLabel" text="Wykres Gantta:" />
+            <TableView fx:id="additionalTableView" prefHeight="236.0" prefWidth="800.0" VBox.vgrow="NEVER">
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <!-- Przyciski do edycji zadań -->
+            <Button fx:id="changeStatusButton" onAction="#handleChangeStatus" text="Zmień Status Zadania" />
+            <Button fx:id="addButton" onAction="#handleAddTask" text="Dodaj Zadanie" />
+            <Button fx:id="editTaskButton" onAction="#handleEditTask" text="Edytuj Zadanie" />
+            <Button fx:id="deleteButton" onAction="#handleDeleteTask" text="Usuń Zadanie" />
+        </ToolBar>
+    </bottom>
+</BorderPane>

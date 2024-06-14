@@ -1,0 +1,101 @@
+/* tasks.css */
+
+/* Stylowanie paska narzędzi (ToolBar) na górze */
+ToolBar {
+    -fx-padding: 10px; /* Dodanie odstępu dookoła ToolBar */
+    -fx-background-color: #f0f0f0; /* Kolor tła ToolBar */
+}
+
+/* Stylowanie przycisków w pasku narzędzi */
+ToolBar Button {
+    -fx-font-size: 14px; /* Rozmiar czcionki */
+    -fx-padding: 5px 10px; /* Dodanie odstępu wewnątrz przycisku */
+    -fx-background-color: #4286f4; /* Kolor tła przycisku */
+    -fx-text-fill: white; /* Kolor tekstu przycisku */
+    -fx-border-radius: 5px; /* Zaokrąglenie rogów */
+}
+
+/* Stylowanie przycisków w pasku narzędzi po najechaniu myszą */
+ToolBar Button:hover {
+    -fx-background-color: #3273e1; /* Zmiana koloru tła po najechaniu myszą */
+}
+
+/* Stylowanie VBox w centralnej części BorderPane */
+VBox {
+    -fx-padding: 20px; /* Dodanie odstępu dookoła VBox */
+}
+
+/* Stylowanie HBox w centralnej części BorderPane */
+HBox {
+    -fx-spacing: 10px; /* Odstęp między elementami HBox */
+}
+
+/* Stylowanie tytułu (Label) */
+#titleLabel {
+    -fx-font-size: 30px; /* Rozmiar czcionki */
+    -fx-text-fill: #333333; /* Kolor tekstu */
+}
+
+#additionalLabel {
+    -fx-font-size: 30px; /* Rozmiar czcionki */
+    -fx-text-fill: #333333; /* Kolor tekstu */
+}
+
+/* Stylowanie TableView */
+#userTableView, #tasksTableView, #productTableView, #additionalTableView{
+    -fx-background-color: #fbbfbc; /* Kolor tła TableView */
+
+}
+
+/* Styl dla nieparzystych wierszy */
+#userTableView .table-row-cell:odd,
+#tasksTableView .table-row-cell:odd,
+#additionalTableView .table-row-cell:odd,
+#productTableView .table-row-cell:odd {
+    -fx-background-color: #d0bdf4; /* Kolor tła dla nieparzystych wierszy */
+}
+
+/* Styl dla parzystych wierszy */
+#userTableView .table-row-cell:even,
+#tasksTableView .table-row-cell:even,
+#additionalTableView .table-row-cell:even,
+#productTableView .table-row-cell:even {
+    -fx-background-color: #8458B3; /* Kolor tła dla parzystych wierszy */
+}
+
+/* Zmiana koloru tła po najechaniu myszką */
+#userTableView .table-row-cell:hover,
+#tasksTableView .table-row-cell:hover,
+#additionalTableView .table-row-cell:hover,
+#productTableView .table-row-cell:hover {
+    -fx-background-color: #e5eaf5; /* Kolor tła po najechaniu myszką */
+}
+
+/* Stylowanie nagłówków kolumn TableView */
+#userTableView .column-header, #tasksTableView .column-header,#additionalTableView .column-header, #productTableView .column-header {
+    -fx-font-size: 16px; /* Font size */
+        -fx-font-weight: bold; /* Font weight */
+        -fx-text-fill: #333333; /* Text color */
+        -fx-background-color: #a0d2eb !important;
+}
+
+/* Stylowanie komórek TableView */
+#userTableView .table-cell, #tasksTableView .table-cell,#additionalTableView .table-cell,  #productTableView .table-cell {
+    -fx-alignment: CENTER; /* Wyrównanie tekstu do środka komórki */
+     -fx-font-size: 20px; /* Rozmiar czcionki */
+}
+
+
+/* Stylowanie przycisków na dole */
+#addButton, #editButton, #deleteButton, #checkButton ,#editTaskButton ,#changeStatusButton, #ProfileButton, #adminPanelButton, #LogoutButton, #StorageButton, #TaskButton, #ReportButton, #SearchButton {
+    -fx-font-size: 25px; /* Rozmiar czcionki */
+    -fx-padding: 5px 10px; /* Dodanie odstępu wewnątrz przycisku */
+    -fx-background-color: #4286f4; /* Kolor tła przycisku */
+    -fx-text-fill: white; /* Kolor tekstu przycisku */
+    -fx-border-radius: 5px; /* Zaokrąglenie rogów */
+}
+
+/* Stylowanie przycisków na dole po najechaniu myszą */
+#addButton:hover, #editButton:hover, #deleteButton:hover, #checkButton:hover, #editTaskButton:hover ,#changeStatusButton:hover, #ProfileButton:hover, #adminPanelButton:hover, #LogoutButton:hover, #StorageButton:hover, #TaskButton:hover, #ReportButton:hover, #SearchButton:hover {
+    -fx-background-color: #3273e1; /* Zmiana koloru tła po najechaniu myszą */
+}

@@ -1,0 +1,53 @@
+/* profile.css */
+
+/* Ustawienie tła dla AnchorPane */
+.root {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Styl dla Labeli */
+.label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+}
+
+/* Styl dla Buttona */
+.button {
+    -fx-font-size: 20px;
+    -fx-background-color: #4CAF50; /* Kolor tła */
+    -fx-text-fill: white; /* Kolor tekstu */
+}
+
+.button:hover {
+    -fx-background-color: #45a049; /* Kolor tła po najechaniu myszką */
+}
+
+/* Styl dla głównego nagłówka */
+#loginLabel {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+}
+
+/* Styl dla GridPane */
+.grid-pane {
+    -fx-padding: 20px;
+    -fx-alignment: center;
+}
+
+/* Styl dla komórek GridPane */
+.grid-pane .label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Styl dla komórek GridPane z danymi */
+.grid-pane .label#emailLabel,
+.grid-pane .label#nameLabel,
+.grid-pane .label#surnameLabel,
+.grid-pane .label#occupationLabel,
+.grid-pane .label#hiredateLabel {
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #666666;
+}

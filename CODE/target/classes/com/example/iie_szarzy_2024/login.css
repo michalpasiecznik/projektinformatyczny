@@ -1,0 +1,45 @@
+.root {
+    -fx-background-color: #ff00ff; /* Jasnoszary kolor tła */
+}
+
+#loginGridPane {
+    -fx-background-color: #ffffff; /* Białe tło */
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+    -fx-border-radius: 10px; /* Zaokrąglone rogi */
+    -fx-border-color: #c0c0c0; /* Kolor obramowania */
+    -fx-border-width: 1px; /* Grubość obramowania */
+}
+
+.label {
+    -fx-font-size: 18px;
+    -fx-min-width: 150px;
+    -fx-text-fill: #333333; /* Czarny kolor tekstu */
+}
+
+.text-field, .password-field {
+    -fx-font-size: 18px;
+    -fx-pref-width: 200px;
+    -fx-background-radius: 5px; /* Zaokrąglone rogi pól tekstowych */
+    -fx-border-radius: 5px; /* Zaokrąglone rogi pól tekstowych */
+    -fx-border-color: #c0c0c0; /* Kolor obramowania pól tekstowych */
+}
+
+.button {
+    -fx-font-size: 18px;
+    -fx-pref-width: 100px;
+    -fx-background-color: #4682B4; /* Niebieski kolor tła */
+    -fx-text-fill: white; /* Biały kolor tekstu */
+    -fx-background-radius: 5px; /* Zaokrąglone rogi przycisku */
+    -fx-border-radius: 5px; /* Zaokrąglone rogi przycisku */
+    -fx-border-color: #4682B4; /* Kolor obramowania przycisku */
+}
+
+.button:hover {
+    -fx-background-color: #6495ED; /* Jasnoniebieski kolor tła przy najechaniu myszką */
+}
+
+#messageLabel {
+    -fx-font-size: 18px;
+    -fx-text-fill: red;
+}
